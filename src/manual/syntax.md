@@ -691,13 +691,13 @@ process = prod(i,nOscs,os.osc(freq*(i+1+shift)))*envelope;
 
 ### Infix Notation and Other Syntax Extensions
 
-> Infix notation is commonly used in mathematics. It consists in placing the operand between the arguments as in \(2+3\)
+> Infix notation is commonly used in mathematics. It is when the operand is placed between the arguments as in \(2+3\)
 
-Besides its algebra-based core syntax, Faust provides some syntax extensions, in particular the familiar *infix notation*. For example if you want to multiply two numbers, say `2` and `3`, you can write directly `2*3` instead of the equivalent core-syntax expression `2,3 : *`.
+Besides its algebra-based core syntax, Faust provides some syntax extensions, in particular operators that can be used with *infix notation* (?). For example if you want to multiply two numbers, say `2` and `3`, you can write `2*3` instead of the equivalent core-syntax expression `2,3 : *`.
 
-The *infix notation* is not limited to numbers or numerical expressions. Arbitrary expressions `A` and `B` can be used, provided that `A,B` has exactly two outputs. For example `_/2` is equivalent to `_,2:/` which divides the incoming signal by `2`. 
+*Infix notation* is not limited to numbers or numerical expressions. Arbitrary expressions `A` and `B` can be used, provided that `A,B` has exactly two outputs. For example `_/2` is equivalent to `_,2:/` which divides the incoming signal by `2`. 
 
-Here are a few examples of equivalences:
+Here are a few examples of equivalent expressions:
 
 | Infix Syntax | | Core Syntax |
 | ----- | -------- | --------- |
@@ -707,11 +707,11 @@ Here are a few examples of equivalences:
 | `_/2` | \(\equiv\) | `_,2 : /` |
 | `A<B` | \(\equiv\) | `A,B : <` |
 
-In case of doubts on the meaning of an infix expression, for example `_*_`, it is useful to translate it to its core syntax equivalent, here `_,_:*`, which is equivalent to `*`.
+If you're unsure what the meaning of an infix expression is, for example `_*_`, it helps to translate it to its core syntax equivalent. In the given example, that would be `_,_:*`, which is equivalent to `*`.
 
 #### Infix Operators
 
-Built-in primitives that can be used in infix notation are called *infix operators* and are listed below. Please note that a more detailed description of these operators is available [section on primitives](#primitives). 
+Built-in primitives that can be used in infix notation are called *infix operators* and are listed below. Please note that a more detailed description of these operators is available in the [section on primitives](#primitives). 
 
 <img src="img/infixop.svg" class="mx-auto d-block">
 
@@ -755,7 +755,7 @@ Syntax | Pri. | Assoc.  | Description |
 
 ##### Delay operators
 
-Delay operators combine two signals and produce a resulting signal by applying a bitwise operation on each sample. The delay operator `@` allows to delay left handside expression by the amount defined by the right handside expression. The unary operator `’` delays the left handside expression by one sample. 
+Delay operators combine two signals and produce a resulting signal by applying a bitwise operation on each sample. The delay operator `@` delays the left expression by the amount defined by the right expression. The unary operator `’` delays the left expression by one sample. 
 
 Syntax | Pri. | Assoc.  | Description | 
 | -------- | -----| ------ | --------- |
@@ -765,9 +765,9 @@ Syntax | Pri. | Assoc.  | Description |
 
 #### Prefix Notation
 
-Beside *infix notation*, it is also possible to use *prefix notation*. The *prefix notation* is the usual mathematical notation for functions \(f(x,y,z,\ldots)\), but extended to *infix operators*.
+Beside *infix notation*, it is also possible to use *prefix notation*. *Prefix notation* is the usual mathematical notation for functions \(f(x,y,z,\ldots)\), but extended to *infix operators*.
 
-It consists in first having the operator, for example `/`, followed by its arguments between parentheses: `/(2,3)`: 
+To use an operator that's normally an infix operator, for example `/`, as a prefix operator list the operator arguments after the operator between parentheses: `/(2,3)`: 
 
 | Prefix Syntax | | Core Syntax |
 | -------- | -------- | --------- |
@@ -778,7 +778,7 @@ It consists in first having the operator, for example `/`, followed by its argum
 
 #### Partial Application
 
-The *partial application* notation is a variant of the *prefix notation* in which not all arguments are given. For instance `/(2)` (divide by 2), `^(3)` (rise to the cube), and `@(512)` (delay by 512 samples) are examples of partial applications where only one argument is given. The result of a partial application is a function that "waits" for the remaining arguments. 
+The *partial application* notation is a variant of the *prefix notation* in which not all arguments are given. For instance `/(2)` (divide by 2), `^(3)` (raise to the power of 2), and `@(512)` (delay by 512 samples) are examples of partial applications where only one argument is given. The result of a partial application is a function that "waits" for the remaining arguments. 
 
 When doing partial application with an *infix operator*, it is important to note that the supplied argument is not the first argument, but always the second one:
 
@@ -848,19 +848,19 @@ process = @(hslider("delay",0,0,100,1));
 ```
 <!-- /faust-run -->
 
-`@` only allows for the implementation of integer delay. Thus, various fractional delay algorithms are implemented in the Faust [delays.lib](https://faustlibraries.grame.fr/libs/delays/) library.
+`@` only allows for the implementation of integer delays. Thus, various fractional delay algorithms are implemented in the Faust [delays.lib](https://faustlibraries.grame.fr/libs/delays/) library.
 
 ### Environment Expressions
 
-Faust is a lexically scoped language. The meaning of a Faust expression is determined by its context of definition (its lexical environment) and not by its context of use. 
+Faust is a lexically scoped language. The meaning of a Faust expression is determined by its context of definition (its lexical environment) and not by its context of use (? TODO).
 
-To keep their original meaning, Faust expressions are bounded to their lexical environment in structures called *closures*. The following constructions allow to explicitly create and access such environments. Moreover they provide powerful means to reuse existing code and promote modular design.
+Faust expressions are bounded to their lexical environment in structures called *closures*. The following language features create and access such environments. Moreover, they provide powerful means to reuse existing code and promote modular design.
 
 <img src="img/envexp.svg" class="mx-auto d-block">
 
 #### `with` Expression
 
-The `with` construction allows to specify a *local environment*: a private list of definition that will be used to evaluate the left hand expression.
+The `with` construction specifies a *local environment*: a private list of definitions that will be used to evaluate the left hand expression.
 
 In the following example:
 
@@ -885,7 +885,7 @@ Please note that `with` is left associative and has the lowest priority:
 
 #### `letrec` Expression
 
-The `letrec` construction is somehow similar to [`with`](#with-expression), but for difference equations instead of regular definitions. It allows us to easily express groups of mutually recursive signals, for example:
+The `letrec` construction is similar to [`with`](#with-expression), but for difference equations instead of regular definitions. It allows us to easily express groups of mutually recursive signals, for example:
 
 $$
 x(t) = y(t-1) + 10\\
@@ -898,10 +898,10 @@ The syntax is defined by the following rules:
 
 <img src="img/letrec.svg" class="mx-auto d-block">
 
-Note the special notation `'x = y + 10` instead of `x = y' + 10`. It makes 
-syntactically impossible to write non-sensical equations like `x=x+1`.
+Note the special notation `'x = y + 10` instead of `x = y' + 10`. This makes it
+syntactically impossible to write nonsensical equations like `x=x+1`.
 
-Here is a more involved example. Let say we want to define an envelope generator with an attack and a release time (as a number of samples), and a gate signal. A possible definition could be:
+Here is a more involved example. Let's say we want to define an envelope generator with an attack and a release time (as a number of samples), and a gate signal. A possible definition could be:
 
 <!-- faust-run -->
 ```
@@ -923,7 +923,7 @@ n(t) = (n(t-1)+1) * (g(t) <= g(t-1))\\
 v(t) = max(0, v(t-1) + (n(t-1)<a(t))/a(t) - (n(t-1)>=a(t))/r(t)) * (g(t)<=g(t-1))
 $$
 
-In order to factor some expressions common to several recursive definitions, we can use the clause `where` followed by one or more definitions. These definitions will only be visible to the recursive equations of the `letrec`, but not to the outside world, unlike the recursive definitions themselves.
+To factor some expressions common to several recursive definitions, we can use the clause `where` followed by one or more definitions. These definitions will only be visible to the recursive equations of the `letrec`, but not to the outside world, unlike the recursive definitions themselves.
 
 For instance in the previous example we can factorize `(g<=g)` leading to the following expression:
 
@@ -935,7 +935,7 @@ ar(a,r,g) = v letrec {
         c = g<=g'; 
     };
 ```
-Please note that `letrec` is essentially syntactic sugar. Here is an example of ’letrec’:
+Please note that `letrec` is essentially syntactic sugar. Here is another example of `letrec`:
 
 ```
 x,y letrec {
@@ -960,7 +960,7 @@ x,y with {
 
 #### `environment` Expression
 
-The `environment` construction allows to create an explicit environment. It is like a [`with'](#with-expression), but without the left hand expression. It is a convenient way to group together related definitions, to isolate groups of definitions and to create a name space hierarchy. 
+The `environment` construction creates an explicit environment. It is like a [`with`](#with-expression), but without the left hand expression. It is a convenient way to group together related definitions, to isolate groups of definitions and to create a name space hierarchy. 
 
 <img src="img/environment.svg" class="mx-auto d-block">
 
@@ -992,14 +992,14 @@ environment{pi = 3.14159; e = 2.718; ... }.pi
 
 #### `library` Expression
 
-The `library` construct allows to create an environment by reading the definitions from a file.
+The `library` construct creates an environment by reading the definitions from a file.
 
 <img src="img/library.svg" class="mx-auto d-block">
 
-For example `library("filters.lib")` represents the [environment](#environment-expression) obtained by reading the file `filters.lib`. It works like `import("filters.lib")` but all the read definitions are stored in a new separate lexical environment. Individual definitions can be accessed as described in the previous paragraph. For example `library("filters.lib").lowpass` denotes the function `lowpass` as defined in the file `filters.lib`.
+For example `library("filters.lib")` represents the [environment](#environment-expression) obtained by reading the file `filters.lib`. It works like `import("filters.lib")` but all the read definitions are stored in a new separate lexical environment. Individual definitions can be accessed using the [access operator](#access-expression). For example `library("filters.lib").lowpass` denotes the function `lowpass` as defined in the file `filters.lib`.
 
-To avoid name conflicts when importing libraries it is recommended to prefer 
-`library` to [`import`](#import). So instead of:
+To avoid name conflicts when importing libraries it is recommended to usually use 
+`library` over [`import`](#import). So instead of:
 
 ```
 import("filters.lib");
@@ -1019,7 +1019,7 @@ fl = library("filters.lib");
 };
 ```
 
-In practice, that's how the `stdfaust.lib`library works.
+In practice, that's how the `stdfaust.lib` library works.
 
 <!-- TODO: import? -->
 
@@ -1077,13 +1077,13 @@ The signature part of a foreign function, `float asinhf|asinh|asinhl|asinfx(floa
 
 In our example, the `asinh` function is called `asinhf` in single precision, `asinh` in double precision, `asinhl` in quad precision and `asinfx` in fixed-point precision. This is why the four names are provided in the signature.
 
-#### Signature
+##### Signature
 
 <img src="img/signature.svg" class="mx-auto d-block">
 
 #### Types
 
-Foreign functions generally expect a precise type: `int` or `float`  for their parameters.  Note that currently only numerical functions involving simple `int` and `float` parameters are allowed currently in Faust. No vectors, tables or data structures can be passed as parameters or returned.
+Foreign functions generally expect a precise type, `int` or `float`,  for their parameters.  Note that currently only numerical functions involving simple `int` and `float` parameters are allowed currently in Faust. No vectors, tables or data structures can be passed as parameters or returned.
 
 Some foreign functions are polymorphic and can accept either int or float arguments. In this case, the polymorphism can be indicated by using the type `any` instead or `int` or `float`. Here is as an example the C function `sizeof` that returns the size of its argument:
 
@@ -1093,7 +1093,7 @@ sizeof = ffunction(int sizeof(any), "","");
 
 Foreign functions with input parameters are considered pure math functions. They are therefore considered free of side effects and called only when their parameters change (that is at the rate of the fastest parameter). 
 
-Exceptions are functions with no input parameters. A typical example is the C `rand()` function. In this case the compiler generates code to call the function at sample rate.
+One exception to this rule are functions with no input parameters. A typical example is the C `rand()` function. In this case the compiler generates code to call the function at sample rate.
 
 #### Foreign Variables and Constants
 
@@ -1106,11 +1106,11 @@ BS = fvariable(int count, <math.h>);
 
 Foreign constants are not supposed to vary. Therefore expressions involving only foreign constants are computed once, during the initialization period. 
 
-Foreign variables are considered to vary at block speed. This means that expressions depending of external variables are computed every block.
+Foreign variables are considered to vary at block speed. This means that expressions depending on external variables are computed every block.
 
 #### Include File 
 
-In declaring foreign functions one has also to specify the include file. It allows the Faust compiler to add the corresponding `#include` in the generated code.
+To declare any foreign functions you also have to specify the include file. This is required so the Faust compiler can add the corresponding `#include` in the generated code.
 
 <img src="img/includefile.svg" class="mx-auto d-block">
 
@@ -1128,13 +1128,14 @@ In declaring foreign functions one can possibly specify the library where the ac
 
 #### Abstractions
 
-Abstractions correspond to functions definitions and allow to generalize a block-diagram by *making variable* some of its parts. 
+Abstractions correspond to function definitions and generalize a block-diagram by *making variables* out of some of its parts. 
 
-Let's say we want to transform a stereo reverb, [`dm.zita_light`](https://faustlibraries.grame.fr/libs/demos/#dmzita_light) for instance, into a mono effect. The following expression can be written (see the sections on [Split Composition](#split-composition) and [Merge Composition](#merge-composition)): 
+Let's say we want to transform a stereo reverb, [`dm.zita_light`](https://faustlibraries.grame.fr/libs/demos/#dmzita_light) for instance, into a mono effect. The following expression can be written: 
 
 ```
 _ <: dm.zita_light :> _ 
 ```
+(For more information about how this works see the sections on [Split Composition](#split-composition) and [Merge Composition](#merge-composition))
 
 The incoming mono signal is split to feed the two input channels of the reverb, while the two output channels of the reverb are mixed together to produce the resulting mono output.
 
@@ -1144,13 +1145,13 @@ Imagine now that we are interested in transforming other stereo effects. We coul
 \(zita_light).(_ <: zita_light :> _)
 ```
 
-The resulting abstraction can then be applied to transform other effects. Note that if `zita_light` is a perfectly valid variable name, a more neutral name would probably be easier to read like:
+The resulting abstraction can then be applied to transform other effects. Note that while `zita_light` is a perfectly valid variable name, a more neutral name would probably be easier to read like:
 
 ```
 \(fx).(_ <: fx :> _)
 ```
 
-A name can be given to the abstraction and in turn use it on `dm.zita_light`:
+A name can be given to the abstraction and we can, in turn, use it on `dm.zita_light`:
 
 <!-- faust-run -->
 ```
@@ -1160,7 +1161,7 @@ process = mono(dm.zita_light);
 ```
 <!-- /faust-run -->
 
-Or even use a more traditional, but equivalent, notation:
+We could also use a more traditional, but equivalent, notation:
 
 ```
 mono(fx) = _ <: fx :> _;
@@ -1168,7 +1169,7 @@ mono(fx) = _ <: fx :> _;
 
 #### Applications
 
-Applications correspond to function calls and allow to replace the variable parts of an abstraction with the specified arguments.
+Applications correspond to function calls and replace the variable parts of an abstraction with the specified arguments.
 
 <img src="img/application.svg" class="mx-auto d-block">
 
@@ -1184,20 +1185,20 @@ The compiler will start by replacing `mono` by its definition:
 \(fx).(_ <: fx :> _)(dm.zita_light)
 ```
 
-> Replacing the *variable part* with the argument is called beta-reduction in Lambda-Calculus
+> Replacing the *variable part* with the argument is called beta-reduction in Lambda-Calculus.
 
-Whenever the Faust compiler find an application of an abstraction it replaces the *variable part* with the argument. The resulting expression is as expected:
+Whenever the Faust compiler finds an application of an abstraction it replaces the *variable part* with the argument. The resulting expression is:
 
 ```
 (_ <: dm.zita_light :> _)
 ```
 
-Note that the arguments given to the primitive or function in applications are reduced to their *block normal form* (that is the flat equivalent block) before the actual application. Thus if the number of outputs of the argument block does not mach the needed number of arguments, the application will be treated as *partial application* and the missing arguments will be replaced by one or several `_` (to complete the number of missing arguments). 
+Note that the arguments given to the primitive or function in applications are reduced to their *block normal form* (that is the flat equivalent block) before the actual application. Thus if the number of outputs of the argument block does not match the needed number of arguments, the application will be treated as *partial application* and the missing arguments will be replaced by one or several `_` (to complete the number of missing arguments). 
 
 
 #### Unapplied abstractions
 
-Usually, lambda abstractions are supposed to be applied on arguments, using beta-reduction in Lambda-Calculus. Functional languages generally treat them as [first-class values](https://en.wikipedia.org/wiki/First-class_function) which give these languages high-order programming capabilities. 
+Usually, lambda abstractions are supposed to be applied on arguments, using beta-reduction in Lambda-Calculus. Functional languages generally treat them as [first-class values](https://en.wikipedia.org/wiki/First-class_function) which give these languages higher-order programming capabilities. 
 
 Another way of looking at abstractions in Faust is as a means of routing or placing blocks that are given as parameters. For example, the following abstraction `repeat(fx) = fx : fx;` could be used to duplicate an effect and route input signals to be successively processed by that effect:
 
@@ -1209,7 +1210,7 @@ process = repeat(dm.zita_light);
 ```
 <!-- /faust-run -->
 
-In Faust, a proper semantic has also been given to *unapplied abstractions*: when a lambda-abstraction is not applied to parameters, it indicates *how to route input signals*. This is a convenient way to work with signals by *explicitly naming them*, to be used in the lambda abstraction body *with their parameter name*.  
+In Faust, there are also semantics for *unapplied abstractions*: when a lambda-abstraction is not applied to parameters, it indicates *how to route input signals*(?). This is a convenient way to work with signals by *explicitly naming them*, to be used in the lambda abstraction body *with their parameter name*.  
 
 For instance a stereo crossing block written in the core syntax:
 
@@ -1227,7 +1228,7 @@ process = \(x,y).(y,x);
 ```
 <!-- /faust-run -->
 
-which is actually equivalent to: 
+which is equivalent to: 
 
 ```
 process(x,y) = y,x; 
@@ -1239,7 +1240,7 @@ Pattern matching rules provide an effective way to analyze and transform block-d
 
 <img src="img/patternabstraction.svg" class="mx-auto d-block">
 
-For example `case{ (x:y) => y:x; (x) => x; }` contains two rules. The first one will match a sequential expression and invert the two part. The second one will match all remaining expressions and leave it untouched. Therefore the application:
+For example `case{ (x:y) => y:x; (x) => x; }` contains two rules. The first one will match a sequential expression and invert the sequence. The second one will match all other expressions and leave them untouched. Therefore the application:
 
 ```
 case{(x:y) => y:x; (x) => x;}(reverb : harmonizer)
@@ -1249,6 +1250,20 @@ will produce:
 
 ```
 harmonizer : freeverb
+```
+
+(? reverb? freeverb?)
+
+and
+
+```
+case{(x:y) => y:x; (x) => x;}(harmonizer)
+```
+
+will produce:
+
+```
+harmonizer
 ```
 
 Please note that patterns are evaluated before the pattern matching operation. Therefore only variables that appear free in the pattern are binding variables during pattern matching. 
