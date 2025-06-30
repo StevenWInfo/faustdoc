@@ -256,11 +256,12 @@ Diagram expressions are assembled from primitive expressions using either binary
 
 Five binary *composition operations* are available to combine block-diagrams: 
 
-* [*recursion*](#recursive-composition) (`~`)
 * [*parallel*](#parallel-composition) (`,`)
 * [*sequential*](#sequential-composition) (`:`)
 * [*split*](#split-composition) (`<:`)
 * [*merge*](#merge-composition) (`:>`)
+* [*recursion*](#recursive-composition) (`~`)
+
 
 One can think of each of these composition operations as a particular way to connect two block diagrams. 
 
